@@ -25,7 +25,7 @@ This is a dummy description of this app features
 
 ## Schermafdrukken
 
-![Schermafdrukken van AppFlowy](./doc/screenshots/example.jpg)
+![Schermafdrukken van AppFlowy](./doc/screenshots/task_manager.png)
 
 ## Documentatie en bronnen
 

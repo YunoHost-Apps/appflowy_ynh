@@ -25,7 +25,7 @@ This is a dummy description of this app features
 
 ## 截图
 
-![AppFlowy 的截图](./doc/screenshots/example.jpg)
+![AppFlowy 的截图](./doc/screenshots/task_manager.png)
 
 ## 文档与资源
 

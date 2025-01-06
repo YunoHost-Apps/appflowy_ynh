@@ -25,7 +25,7 @@ This is a dummy description of this app features
 
 ## Zrzuty ekranu
 
-![Zrzut ekranu z AppFlowy](./doc/screenshots/example.jpg)
+![Zrzut ekranu z AppFlowy](./doc/screenshots/task_manager.png)
 
 ## Dokumentacja i zasoby
 

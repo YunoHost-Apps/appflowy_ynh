@@ -25,7 +25,7 @@ Ceci est une fausse description des fonctionalités de l'app
 
 ## Captures d’écran
 
-![Capture d’écran de AppFlowy](./doc/screenshots/example.jpg)
+![Capture d’écran de AppFlowy](./doc/screenshots/task_manager.png)
 
 ## Documentations et ressources
 

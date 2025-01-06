@@ -25,7 +25,7 @@ This is a dummy description of this app features
 
 ## Pantaila-argazkiak
 
-![AppFlowy(r)en pantaila-argazkia](./doc/screenshots/example.jpg)
+![AppFlowy(r)en pantaila-argazkia](./doc/screenshots/task_manager.png)
 
 ## Dokumentazioa eta baliabideak
 

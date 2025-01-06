@@ -25,7 +25,7 @@ This is a dummy description of this app features
 
 ## Снимки экрана
 
-![Снимок экрана AppFlowy](./doc/screenshots/example.jpg)
+![Снимок экрана AppFlowy](./doc/screenshots/task_manager.png)
 
 ## Документация и ресурсы
 

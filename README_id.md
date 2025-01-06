@@ -25,7 +25,7 @@ This is a dummy description of this app features
 
 ## Tangkapan Layar
 
-![Tangkapan Layar pada AppFlowy](./doc/screenshots/example.jpg)
+![Tangkapan Layar pada AppFlowy](./doc/screenshots/task_manager.png)
 
 ## Dokumentasi dan sumber daya
 
