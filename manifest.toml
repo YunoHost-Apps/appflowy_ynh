@@ -114,7 +114,7 @@ ram.runtime = "50M"
     [resources.apt]
     # This will automatically install/uninstall the following apt packages
     # and implicitly define the $phpversion setting as 8.0 (if phpX.Y-foobar dependencies are listed)
-    packages = "rsync, openssl, libc6, libssl-dev, postgresql, redis, gcc, make, postgresql-server-dev-15, build-essential, libssl-dev, zlib1g-dev, libbz2-dev, libreadline-dev, libsqlite3-dev, curl, git, libncursesw5-dev, xz-utils, tk-dev, libxml2-dev, libxmlsec1-dev, libffi-dev, liblzma-dev, libpq-dev"
+    packages = "rsync, openssl, libc6, libssl-dev, postgresql, redis, gcc, make, postgresql-server-dev-13\\|postgresql-server-dev-15\\|postgresql-server-dev-17, build-essential, libssl-dev, zlib1g-dev, libbz2-dev, libreadline-dev, libsqlite3-dev, curl, git, libncursesw5-dev, xz-utils, tk-dev, libxml2-dev, libxmlsec1-dev, libffi-dev, liblzma-dev, libpq-dev"
 
     [resources.database]
     # This will automatically provision/deprovison a DB and store the corresponding credentials in settings $db_user, $db_name, $db_pwd
