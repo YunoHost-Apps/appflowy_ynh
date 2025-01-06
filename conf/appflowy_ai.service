@@ -1,0 +1,26 @@
+[Unit]
+Description=AppFlowy-Ai
+After=network.target
+
+[Service]
+Type=simple
+User=__APP__
+Group=__APP__
+WorkingDirectory=__INSTALL_DIR__/appflowy_ai/server/
+EnvironmentFile=__INSTALL_DIR__/.env
+Environment="PATH=__PATH_WITH_PYTHON__"
+ExecStart=__PYTHON_DIR__/uvicorn main:app
+StandardOutput=append:/var/log/__APP__/__APP___ai.log
+StandardError=inherit
+Restart=always
+
+# Sandboxing options to harden security
+# Details for these options: https://www.freedesktop.org/software/systemd/man/systemd.exec.html
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectHome=false
+ProtectSystem=strict
+
+[Install]
+WantedBy=multi-user.target

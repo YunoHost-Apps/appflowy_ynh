@@ -15,10 +15,7 @@ ynh_script_progression "Restoring the app main directory..."
 
 ynh_restore "$install_dir"
 
-### $install_dir will automatically be initialized with some decent
-### permissions by default... however, you may need to recursively reapply
-### ownership to all files such as after the ynh_setup_source step
-chown -R "$app:www-data" "$install_dir"
+chown -R "$app:$app" "$install_dir"
 
 #=================================================
 # RESTORE THE DATA DIRECTORY
@@ -27,13 +24,12 @@ ynh_script_progression "Restoring the data directory..."
 
 ynh_restore "$data_dir"
 
-### (Same as for install dir)
-chown -R "$app:www-data" "$data_dir"
+chown -R "$app:$app" "$data_dir"
 
 #=================================================
-# RESTORE THE MYSQL DATABASE
+# RESTORE THE POSTGRESQL DATABASE
 #=================================================
-ynh_script_progression "Restoring the MySQL database..."
+ynh_script_progression "Restoring the PostgreSQL database..."
 
 ynh_mysql_db_shell < ./db.sql
 
@@ -42,37 +38,34 @@ ynh_mysql_db_shell < ./db.sql
 #=================================================
 ynh_script_progression "Restoring system configurations related to $app..."
 
-### This should be a symetric version of what happens in the install script
-
-ynh_restore "/etc/php/$php_version/fpm/pool.d/$app.conf"
-
 ynh_restore "/etc/nginx/conf.d/$domain.d/$app.conf"
 
-ynh_restore "/etc/systemd/system/$app.service"
-systemctl enable "$app.service" --quiet
+ynh_restore "/etc/systemd/system/${app}_minio.service"
+systemctl enable "${app}_minio.service" --quiet
+ynh_restore "/etc/systemd/system/${app}_gotrue.service"
+systemctl enable "${app}_gotrue.service" --quiet
+ynh_restore "/etc/systemd/system/${app}_cloud.service"
+systemctl enable "${app}_cloud.service" --quiet
+ynh_restore "/etc/systemd/system/${app}_admin_frontend.service"
+systemctl enable "${app}_admin_frontend.service" --quiet
+ynh_restore "/etc/systemd/system/${app}_ai.service"
+systemctl enable "${app}_ai.service" --quiet
+ynh_restore "/etc/systemd/system/${app}_worker.service"
+systemctl enable "${app}_worker.service" --quiet
 
-yunohost service add "$app" --description="A short description of the app" --log="/var/log/$app/$app.log"
+yunohost service add ${app}_minio --description="A short description of the app" --log="/var/log/$app/${app}_minio.log"
+yunohost service add ${app}_gotrue --description="A short description of the app" --log="/var/log/$app/${app}_gotrue.log"
+yunohost service add ${app}_cloud --description="A short description of the app" --log="/var/log/$app/${app}_cloud.log"
+yunohost service add ${app}_admin_frontend --description="A short description of the app" --log="/var/log/$app/${app}_admin_frontend.log"
+yunohost service add ${app}_ai --description="A short description of the app" --log="/var/log/$app/${app}_ai.log"
+yunohost service add ${app}_worker --description="A short description of the app" --log="/var/log/$app/${app}_worker.log"
 
 ynh_restore "/etc/logrotate.d/$app"
-
-ynh_restore "/etc/fail2ban/jail.d/$app.conf"
-ynh_restore "/etc/fail2ban/filter.d/$app.conf"
-ynh_systemctl --action=restart --service=fail2ban
 
 #=================================================
 # RESTORE VARIOUS FILES
 #=================================================
 
-ynh_restore "/etc/cron.d/$app"
-ynh_restore "/etc/$app/"
-
-### For apps with huge logs, you might want to not backup logs every time:
-### The mkdir call is just here in case the log directory was not backed up.
-### mkdir -p "/var/log/$app"
-### chown $app:www-data "/var/log/$app"
-### ynh_restore "/var/log/$app/" || true
-###
-### For other apps, the simple way is better:
 ynh_restore "/var/log/$app/"
 
 #=================================================
@@ -80,10 +73,12 @@ ynh_restore "/var/log/$app/"
 #=================================================
 ynh_script_progression "Reloading NGINX web server and $app's service..."
 
-### Typically you only have either $app or PHP-FPM but not both at the same time...
-ynh_systemctl --service="$app" --action="start"
-
-ynh_systemctl --service="php$php_version-fpm" --action=reload
+ynh_systemctl --service="${app}_minio" --action="start" --log_path="/var/log/$app/${app}_minio.log" --wait_until="Console:"
+ynh_systemctl --service="${app}_gotrue" --action="start" --log_path="/var/log/$app/${app}_gotrue.log" --wait_until="GoTrue API started"
+ynh_systemctl --service="${app}_cloud" --action="start" --log_path="/var/log/$app/${app}_cloud.log" --wait_until="Server started"
+ynh_systemctl --service="${app}_admin_frontend" --action="start" --log_path="/var/log/$app/${app}_admin_frontend.log" --wait_until="listening on"
+ynh_systemctl --service="${app}_ai" --action="start" --log_path="/var/log/$app/${app}_ai.log"
+ynh_systemctl --service="${app}_worker" --action="start" --log_path="/var/log/$app/${app}_worker.log" --wait_until="Starting importer worker"
 
 ynh_systemctl --service=nginx --action=reload
 

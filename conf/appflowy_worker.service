@@ -1,0 +1,25 @@
+[Unit]
+Description=AppFlowy-Worker
+After=network.target
+
+[Service]
+Type=simple
+User=__APP__
+Group=__APP__
+WorkingDirectory=__INSTALL_DIR__/appflowy_worker/
+EnvironmentFile=__INSTALL_DIR__/.env
+ExecStart=__INSTALL_DIR__/appflowy_worker/appflowy_worker
+StandardOutput=append:/var/log/__APP__/__APP___worker.log
+StandardError=inherit
+Restart=always
+
+# Sandboxing options to harden security
+# Details for these options: https://www.freedesktop.org/software/systemd/man/systemd.exec.html
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectHome=false
+ProtectSystem=strict
+
+[Install]
+WantedBy=multi-user.target
