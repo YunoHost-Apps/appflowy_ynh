@@ -12,8 +12,7 @@ version = "0.9.2~ynh1"
 maintainers = ["yalh76"]
 
 [upstream]
-# NB: Only the "license" key is mandatory. Remove entries for which there's no relevant data
-license = "free" # you can see the available licenses identifiers list here: https://spdx.org/licenses/
+license = "AGPL-3.0-only"
 website = "https://appflowy.io/"
 admindoc = "https://github.com/AppFlowy-IO/AppFlowy-Cloud/blob/main/doc/DEPLOYMENT.md"
 userdoc = "https://docs.appflowy.io/docs/guides/appflowy/self-hosting-appflowy"
