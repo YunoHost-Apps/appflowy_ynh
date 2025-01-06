@@ -13,6 +13,8 @@ source /usr/share/yunohost/helpers
 # INITIALIZE AND STORE SETTINGS
 #=================================================
 
+ynh_app_setting_set --app="$app" --key=password --value="$password"
+
 admin_mail=$(ynh_user_get_info --username="$admin" --key="mail")
 ynh_app_setting_set --app="$app" --key=admin_mail --value="$admin_mail"
 
