@@ -105,11 +105,12 @@ ram.runtime = "50M"
 
     [resources.ports]
     # This will pick a random port for reverse-proxying and store it as the $port setting
+    minio.default = 9000
+    minio_console.default = 9001
     admin_frontend.default = 3000
     cloud.default = 8000
     gotrue.default = 9999
     ai.default = 5001
-    minio.default = 9000
 
     [resources.apt]
     # This will automatically install/uninstall the following apt packages
