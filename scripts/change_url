@@ -16,7 +16,12 @@ source /usr/share/yunohost/helpers
 #=================================================
 ynh_script_progression "Stopping $app's systemd service..."
 
-ynh_systemctl --service="$app" --action="stop"
+ynh_systemctl --service="${app}_worker" --action="stop"
+ynh_systemctl --service="${app}_ai" --action="stop"
+ynh_systemctl --service="${app}_admin_frontend" --action="stop"
+ynh_systemctl --service="${app}_gotrue" --action="stop"
+ynh_systemctl --service="${app}_cloud" --action="stop"
+ynh_systemctl --service="${app}_minio" --action="stop
 
 #=================================================
 # MODIFY URL IN NGINX CONF
@@ -29,15 +34,26 @@ ynh_config_change_url_nginx
 #=================================================
 # SPECIFIC MODIFICATIONS
 #=================================================
+# UPDATE A CONFIG FILE
+#=================================================
+ynh_script_progression "Updating $app's configuration files..."
 
-## do any changes to files that reference specific installation domain/path, i.e. regenerate configs etc
+ynh_config_add --template="deploy.env" --destination="$install_dir/.env"
+
+chmod 400 "$install_dir/.env"
+chown "$app:$app" "$install_dir/.env"
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
 ynh_script_progression "Starting $app's systemd service..."
 
-ynh_systemctl --service="$app" --action="start"
+ynh_systemctl --service="${app}_minio" --action="start" --log_path="/var/log/$app/${app}_minio.log" --wait_until="Console:"
+ynh_systemctl --service="${app}_gotrue" --action="start" --log_path="/var/log/$app/${app}_gotrue.log" --wait_until="GoTrue API started"
+ynh_systemctl --service="${app}_cloud" --action="start" --log_path="/var/log/$app/${app}_cloud.log" --wait_until="Server started"
+ynh_systemctl --service="${app}_admin_frontend" --action="start" --log_path="/var/log/$app/${app}_admin_frontend.log" --wait_until="listening on"
+ynh_systemctl --service="${app}_ai" --action="start" --log_path="/var/log/$app/${app}_ai.log"
+ynh_systemctl --service="${app}_worker" --action="start" --log_path="/var/log/$app/${app}_worker.log" --wait_until="Starting importer worker"
 
 #=================================================
 # END OF SCRIPT
