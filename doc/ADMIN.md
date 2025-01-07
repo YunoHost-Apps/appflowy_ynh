@@ -1,3 +1,1 @@
-This is a dummy admin doc for this app
-
-The app install dir is `__INSTALL_DIR__`
+You can connect to https://yourdomain to manage and invite new users

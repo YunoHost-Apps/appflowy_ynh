@@ -4,8 +4,7 @@ packaging_format = 2
 
 id = "appflowy"
 name = "AppFlowy"
-description.en = "Explain in *a few (10~15) words* the purpose of the app or what it actually does (it is meant to give a rough idea to users browsing a catalog of 100+ apps)"
-description.fr = "Expliquez en *quelques* (10~15) mots l'utilité de l'app ou ce qu'elle fait (l'objectif est de donner une idée grossière pour des utilisateurs qui naviguent dans un catalogue de 100+ apps)"
+description.en = "Bring projects, wikis, and teams together with AI"
 
 version = "0.9.2~ynh1"
 
@@ -24,9 +23,9 @@ helpers_version = "2.1"
 architectures = "all"
 multi_instance = true
 
-ldap = "?"
+ldap = false
 
-sso = "?"
+sso = false
 
 disk = "50M"
 ram.build = "50M"
@@ -40,13 +39,6 @@ ram.runtime = "50M"
     type = "group"
     default = "visitors"
 
-    [install.language]
-    ask.en = "Choose the application language"
-    ask.fr = "Choisissez la langue de l'application"
-    type = "select"
-    choices = ["fr", "en"]
-    default = "fr"
-
     [install.admin]
     type = "user"
 
@@ -54,6 +46,7 @@ ram.runtime = "50M"
     type = "password"
 
     [install.openai_api_key]
+    ask.en = "Provide an OpenAI API KEY"
     type = "text"
 
 [resources]
@@ -77,12 +70,12 @@ ram.runtime = "50M"
     prefetch = false
     autoupdate.strategy = "latest_github_tag"
 
-    arm64.url = "https://dl.min.io/server/minio/release/linux-arm64/archive/minio.RELEASE.2023-09-07T02-05-02Z"
-    arm64.sha256 = "b32d3ab56d2184220b3a0cb7d82fd5f8659f61230f6d8047a8ce09ed1d20e291"
+    arm64.url = "https://dl.min.io/server/minio/release/linux-arm64/archive/minio.RELEASE.2024-12-18T13-15-44Z"
+    arm64.sha256 = "455c9b3093b7c1e6153c85cfd745c7c401a92497346ba24dbe45775c7b3ab1cd"
 
-    amd64.url = "https://dl.min.io/server/minio/release/linux-amd64/archive/minio.RELEASE.2023-09-07T02-05-02Z"
-    amd64.sha256 = "d6c6a13c25b91893ffcd8fc4a2bdb4f0653352705cbf38fcb3eadbe7dec93e0f"
-    
+    amd64.url = "https://dl.min.io/server/minio/release/linux-amd64/archive/minio.RELEASE.2024-12-18T13-15-44Z"
+    amd64.sha256 = "88182336ab5793488f2caad54846056b330f0dcb5c488b60d52434beeebae3ca"
+
     [resources.sources.pgvector]
     url = "https://github.com/pgvector/pgvector/archive/refs/tags/v0.8.0.tar.gz"
     sha256 = "867a2c328d4928a5a9d6f052cd3bc78c7d60228a9b914ad32aa3db88e9de27b0"
@@ -107,9 +100,9 @@ ram.runtime = "50M"
     # This will pick a random port for reverse-proxying and store it as the $port setting
     minio.default = 9000
     minio_console.default = 9001
-    admin_frontend.default = 3000
-    cloud.default = 8000
     gotrue.default = 9999
+    cloud.default = 8000
+    admin_frontend.default = 3000
     ai.default = 5001
 
     [resources.apt]

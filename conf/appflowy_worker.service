@@ -1,13 +1,14 @@
 [Unit]
 Description=AppFlowy-Worker
-After=network.target
+Requires=network.target postgresql.service redis-server.service __APP___minio.service
+After=network.target postgresql.service redis-server.service __APP___minio.service
 
 [Service]
 Type=simple
 User=__APP__
 Group=__APP__
 WorkingDirectory=__INSTALL_DIR__/appflowy_worker/
-EnvironmentFile=__INSTALL_DIR__/.env
+EnvironmentFile=__INSTALL_DIR__/appflowy_worker/.env
 ExecStart=__INSTALL_DIR__/appflowy_worker/appflowy_worker
 StandardOutput=append:/var/log/__APP__/__APP___worker.log
 StandardError=inherit
@@ -20,6 +21,8 @@ PrivateTmp=yes
 PrivateDevices=yes
 ProtectHome=false
 ProtectSystem=strict
+
+Slice=__APP__.slice
 
 [Install]
 WantedBy=multi-user.target

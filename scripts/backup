@@ -32,10 +32,10 @@ ynh_backup "/etc/nginx/conf.d/$domain.d/$app.conf"
 # Backup the systemd service unit
 ynh_backup "/etc/systemd/system/${app}_minio.service"
 ynh_backup "/etc/systemd/system/${app}_gotrue.service"
-ynh_backup "/etc/systemd/system/${app}_cloud.service"
-ynh_backup "/etc/systemd/system/${app}_admin_frontend.service"
 ynh_backup "/etc/systemd/system/${app}_ai.service"
 ynh_backup "/etc/systemd/system/${app}_worker.service"
+ynh_backup "/etc/systemd/system/${app}_cloud.service"
+ynh_backup "/etc/systemd/system/${app}_admin_frontend.service"
 
 # Backup the logrotate configuration
 ynh_backup "/etc/logrotate.d/$app"

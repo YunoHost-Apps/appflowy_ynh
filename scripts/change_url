@@ -12,11 +12,11 @@ source /usr/share/yunohost/helpers
 #=================================================
 ynh_script_progression "Stopping $app's systemd service..."
 
+ynh_systemctl --service="${app}_admin_frontend" --action="stop"
+ynh_systemctl --service="${app}_cloud" --action="stop"
 ynh_systemctl --service="${app}_worker" --action="stop"
 ynh_systemctl --service="${app}_ai" --action="stop"
-ynh_systemctl --service="${app}_admin_frontend" --action="stop"
 ynh_systemctl --service="${app}_gotrue" --action="stop"
-ynh_systemctl --service="${app}_cloud" --action="stop"
 ynh_systemctl --service="${app}_minio" --action="stop"
 
 #=================================================
@@ -34,22 +34,46 @@ ynh_config_change_url_nginx
 #=================================================
 ynh_script_progression "Updating $app's configuration files..."
 
-ynh_config_add --template="deploy.env" --destination="$install_dir/.env"
+domain=$new_domain
 
-chmod 400 "$install_dir/.env"
-chown "$app:$app" "$install_dir/.env"
+ynh_script_progression "Updating $app's configuration files..."
+
+ynh_config_add --template="appflowy_minio.env" --destination="$install_dir/appflowy_minio/.env"
+chmod 400 "$install_dir/appflowy_minio/.env"
+chown "$app:$app" "$install_dir/appflowy_minio/.env"
+
+local_hostname=$(hostname)
+ynh_config_add --template="appflowy_gotrue.env" --destination="$install_dir/appflowy_gotrue/.env"
+chmod 400 "$install_dir/appflowy_gotrue/.env"
+chown "$app:$app" "$install_dir/appflowy_gotrue/.env"
+
+ynh_config_add --template="appflowy_ai.env" --destination="$install_dir/appflowy_ai/.env"
+chmod 400 "$install_dir/appflowy_ai/.env"
+chown "$app:$app" "$install_dir/appflowy_ai/.env"
+
+ynh_config_add --template="appflowy_worker.env" --destination="$install_dir/appflowy_worker/.env"
+chmod 400 "$install_dir/appflowy_worker/.env"
+chown "$app:$app" "$install_dir/appflowy_worker/.env"
+
+ynh_config_add --template="appflowy_cloud.env" --destination="$install_dir/appflowy_cloud/.env"
+chmod 400 "$install_dir/appflowy_cloud/.env"
+chown "$app:$app" "$install_dir/appflowy_cloud/.env"
+
+ynh_config_add --template="appflowy_admin_frontend.env" --destination="$install_dir/appflowy_admin_frontend/.env"
+chmod 400 "$install_dir/appflowy_admin_frontend/.env"
+chown "$app:$app" "$install_dir/appflowy_admin_frontend/.env"
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
 ynh_script_progression "Starting $app's systemd service..."
 
-ynh_systemctl --service="${app}_minio" --action="start" --log_path="/var/log/$app/${app}_minio.log" --wait_until="Console:"
+ynh_systemctl --service="${app}_minio" --action="start" --log_path="/var/log/$app/${app}_minio.log" --wait_until="WebUI:"
 ynh_systemctl --service="${app}_gotrue" --action="start" --log_path="/var/log/$app/${app}_gotrue.log" --wait_until="GoTrue API started"
+ynh_systemctl --service="${app}_ai" --action="start" --log_path="/var/log/$app/${app}_ai.log" --wait_until="Uvicorn running"
+ynh_systemctl --service="${app}_worker" --action="start" --log_path="/var/log/$app/${app}_worker.log" --wait_until="Starting importer worker"
 ynh_systemctl --service="${app}_cloud" --action="start" --log_path="/var/log/$app/${app}_cloud.log" --wait_until="Server started"
 ynh_systemctl --service="${app}_admin_frontend" --action="start" --log_path="/var/log/$app/${app}_admin_frontend.log" --wait_until="listening on"
-ynh_systemctl --service="${app}_ai" --action="start" --log_path="/var/log/$app/${app}_ai.log"
-ynh_systemctl --service="${app}_worker" --action="start" --log_path="/var/log/$app/${app}_worker.log" --wait_until="Starting importer worker"
 
 #=================================================
 # END OF SCRIPT

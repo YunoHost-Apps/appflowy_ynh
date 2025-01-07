@@ -15,11 +15,19 @@ source /usr/share/yunohost/helpers
 
 ynh_app_setting_set --app="$app" --key=password --value="$password"
 
-admin_mail=$(ynh_user_get_info --username="$admin" --key="mail")
-ynh_app_setting_set --app="$app" --key=admin_mail --value="$admin_mail"
+admin_email=$(ynh_user_get_info --username="$admin" --key="mail")
+ynh_app_setting_set --app="$app" --key=admin_email --value="$admin_email"
 
+ynh_user="${app}_notifs"
+ynh_app_setting_set --app="$app" --key="ynh_user" --value="$ynh_user"
 ynh_user_password=$(ynh_string_random --length=30)
 ynh_app_setting_set --app="$app" --key="ynh_user_password" --value="$ynh_user_password"
+
+jwt_secret=$(ynh_string_random --length=30)
+ynh_app_setting_set --app="$app" --key="jwt_secret" --value="$jwt_secret"
+
+supabase_password=$(ynh_string_random --length=30)
+ynh_app_setting_set --app="$app" --key="supabase_password" --value="$supabase_password"
 
 #=================================================
 # CREATE DEDICATED USER
@@ -27,14 +35,12 @@ ynh_app_setting_set --app="$app" --key="ynh_user_password" --value="$ynh_user_pa
 ynh_script_progression --message="Configuring yunohost users..."
 
 yunohost user create "$ynh_user" -F "AppFlowy Notifications" --domain "$domain" --password "$ynh_user_password" -q 0
-yunohost user update "$ynh_user" --add-mailalias "$app@$domain" --add-mailforward "$admin_mail"
+yunohost user update "$ynh_user" --add-mailalias "$app@$domain" --add-mailforward "$admin_email"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 ynh_script_progression "Setting up source files..."
-
-ynh_python_install
 
 # Download, check integrity, uncompress and patch the source from manifest.toml
 ynh_setup_source --dest_dir="$install_dir/appflowy_minio" --source_id="minio"
@@ -50,6 +56,16 @@ cp $install_dir/build/gotrue/auth $install_dir/appflowy_gotrue/appflowy_gotrue
 rsync -a --delete $install_dir/build/gotrue/migrations/ $install_dir/appflowy_gotrue/migrations/
 ynh_safe_rm "$install_dir/build/gotrue/"
 
+ynh_docker_image_extract --dest_dir="$install_dir/build/appflowy_ai/" --image_spec="appflowyinc/appflowy_ai:0.6.16"
+mkdir -p $install_dir/appflowy_ai/
+rsync -a --delete $install_dir/build/appflowy_ai/usr/src/app/ $install_dir/appflowy_ai/
+ynh_safe_rm "$install_dir/build/appflowy_ai/"
+
+ynh_docker_image_extract --dest_dir="$install_dir/build/appflowy_worker/" --image_spec="appflowyinc/appflowy_worker:$docker_version"
+mkdir -p $install_dir/appflowy_worker/
+cp $install_dir/build/appflowy_worker/usr/local/bin/appflowy_worker $install_dir/appflowy_worker/appflowy_worker
+ynh_safe_rm "$install_dir/build/appflowy_worker/"
+
 ynh_docker_image_extract --dest_dir="$install_dir/build/appflowy_cloud/" --image_spec="appflowyinc/appflowy_cloud:$docker_version"
 mkdir -p $install_dir/appflowy_cloud/
 cp $install_dir/build/appflowy_cloud/usr/local/bin/appflowy_cloud $install_dir/appflowy_cloud/appflowy_cloud
@@ -61,25 +77,37 @@ cp $install_dir/build/admin_frontend/usr/local/bin/admin_frontend $install_dir/a
 rsync -a --delete $install_dir/build/admin_frontend/app/assets/ $install_dir/appflowy_admin_frontend/assets/
 ynh_safe_rm "$install_dir/build/admin_frontend/"
 
-ynh_docker_image_extract --dest_dir="$install_dir/build/appflowy_ai/" --image_spec="appflowyinc/appflowy_ai:0.6.16"
-mkdir -p $install_dir/appflowy_ai/
-rsync -a --delete $install_dir/build/appflowy_ai/usr/src/app/ $install_dir/appflowy_ai/
-ynh_safe_rm "$install_dir/build/appflowy_ai/"
-
-ynh_docker_image_extract --dest_dir="$install_dir/build/appflowy_worker/" --image_spec="appflowyinc/appflowy_worker:$docker_version"
-mkdir -p $install_dir/appflowy_worker/
-cp $install_dir/build/appflowy_worker/usr/local/bin/appflowy_worker $install_dir/appflowy_worker/appflowy_worker
-ynh_safe_rm "$install_dir/build/appflowy_worker/"
+ynh_python_install
 
 #=================================================
 # APP INITIAL CONFIGURATION
 #=================================================
 ynh_script_progression "Adding $app's configuration files..."
 
-ynh_config_add --template="deploy.env" --destination="$install_dir/.env"
+ynh_config_add --template="appflowy_minio.env" --destination="$install_dir/appflowy_minio/.env"
+chmod 400 "$install_dir/appflowy_minio/.env"
+chown "$app:$app" "$install_dir/appflowy_minio/.env"
 
-chmod 400 "$install_dir/.env"
-chown "$app:$app" "$install_dir/.env"
+local_hostname=$(hostname)
+ynh_config_add --template="appflowy_gotrue.env" --destination="$install_dir/appflowy_gotrue/.env"
+chmod 400 "$install_dir/appflowy_gotrue/.env"
+chown "$app:$app" "$install_dir/appflowy_gotrue/.env"
+
+ynh_config_add --template="appflowy_ai.env" --destination="$install_dir/appflowy_ai/.env"
+chmod 400 "$install_dir/appflowy_ai/.env"
+chown "$app:$app" "$install_dir/appflowy_ai/.env"
+
+ynh_config_add --template="appflowy_worker.env" --destination="$install_dir/appflowy_worker/.env"
+chmod 400 "$install_dir/appflowy_worker/.env"
+chown "$app:$app" "$install_dir/appflowy_worker/.env"
+
+ynh_config_add --template="appflowy_cloud.env" --destination="$install_dir/appflowy_cloud/.env"
+chmod 400 "$install_dir/appflowy_cloud/.env"
+chown "$app:$app" "$install_dir/appflowy_cloud/.env"
+
+ynh_config_add --template="appflowy_admin_frontend.env" --destination="$install_dir/appflowy_admin_frontend/.env"
+chmod 400 "$install_dir/appflowy_admin_frontend/.env"
+chown "$app:$app" "$install_dir/appflowy_admin_frontend/.env"
 
 #=================================================
 # SYSTEM CONFIGURATION
@@ -91,22 +119,22 @@ ynh_config_add_nginx
 
 # Create a dedicated systemd config
 ynh_config_add_systemd --service="${app}_minio" --template="appflowy_minio.service"
-yunohost service add ${app}_minio --description="A short description of the app" --log="/var/log/$app/${app}_minio.log"
+yunohost service add ${app}_minio --description="AppFlowy-MinIO storage" --log="/var/log/$app/${app}_minio.log"
 
 ynh_config_add_systemd --service="${app}_gotrue" --template="appflowy_gotrue.service"
-yunohost service add ${app}_gotrue --description="A short description of the app" --log="/var/log/$app/${app}_gotrue.log"
-
-ynh_config_add_systemd --service="${app}_cloud" --template="appflowy_cloud.service"
-yunohost service add ${app}_cloud --description="A short description of the app" --log="/var/log/$app/${app}_cloud.log"
-
-ynh_config_add_systemd --service="${app}_admin_frontend" --template="appflowy_admin_frontend.service"
-yunohost service add ${app}_admin_frontend --description="A short description of the app" --log="/var/log/$app/${app}_admin_frontend.log"
+yunohost service add ${app}_gotrue --description="AppFlowy-Gotrue Authentication" --log="/var/log/$app/${app}_gotrue.log"
 
 ynh_config_add_systemd --service="${app}_ai" --template="appflowy_ai.service"
-yunohost service add ${app}_ai --description="A short description of the app" --log="/var/log/$app/${app}_ai.log"
+yunohost service add ${app}_ai --description="AppFlowy-Ai" --log="/var/log/$app/${app}_ai.log"
 
 ynh_config_add_systemd --service="${app}_worker" --template="appflowy_worker.service"
-yunohost service add ${app}_worker --description="A short description of the app" --log="/var/log/$app/${app}_worker.log"
+yunohost service add ${app}_worker --description="AppFlowy-Worker" --log="/var/log/$app/${app}_worker.log"
+
+ynh_config_add_systemd --service="${app}_cloud" --template="appflowy_cloud.service"
+yunohost service add ${app}_cloud --description="AppFlowy-Cloud" --log="/var/log/$app/${app}_cloud.log"
+
+ynh_config_add_systemd --service="${app}_admin_frontend" --template="appflowy_admin_frontend.service"
+yunohost service add ${app}_admin_frontend --description="AppFlowy-Admin-Frontend" --log="/var/log/$app/${app}_admin_frontend.log"
 
 # Use logrotate to manage application logfile(s)
 ynh_config_add_logrotate
@@ -116,24 +144,49 @@ ynh_config_add_logrotate
 #=================================================
 ynh_script_progression "Building app..."
 
-# Initializing Gotrue
-(
-	chmod +x ../conf/supabase_auth.sh
-	source $install_dir/.env
-	export POSTGRES_DB=$POSTGRES_DB
-	export POSTGRES_USER=$POSTGRES_USER
-	export SUPABASE_PASSWORD=$SUPABASE_PASSWORD
-	../conf/supabase_auth.sh
-)
-
 # Installing pgvector
 pushd "$install_dir/build/pgvector"
 	make
 	make install
-	ynh_psql_db_shell $db_name <<< "CREATE EXTENSION vector;"
 popd
 
 ynh_safe_rm "$install_dir/build/"
+
+# Initializing Gotrue
+ynh_psql_db_shell $db_name  <<<  "
+    CREATE OR REPLACE FUNCTION create_roles(roles text []) RETURNS void LANGUAGE plpgsql AS \$\$
+    DECLARE role_name text;
+    BEGIN FOREACH role_name IN ARRAY roles LOOP IF NOT EXISTS (
+        SELECT 1
+        FROM pg_roles
+        WHERE rolname = role_name
+    ) THEN EXECUTE 'CREATE ROLE ' || role_name;
+    END IF;
+    END LOOP;
+    END;
+    \$\$;
+    DO \$\$ BEGIN IF NOT EXISTS (
+        SELECT
+        FROM pg_catalog.pg_roles
+        WHERE rolname = 'supabase_auth_admin'
+    ) THEN CREATE USER supabase_auth_admin BYPASSRLS NOINHERIT CREATEROLE LOGIN NOREPLICATION;
+    END IF;
+    END \$\$;
+
+    CREATE SCHEMA IF NOT EXISTS auth AUTHORIZATION supabase_auth_admin;
+    GRANT USAGE ON SCHEMA auth TO $db_user;
+    GRANT CREATE ON DATABASE $db_name TO supabase_auth_admin;
+    GRANT supabase_auth_admin TO $db_user;
+    ALTER USER supabase_auth_admin SET search_path = 'auth';
+    ALTER USER supabase_auth_admin WITH PASSWORD '$supabase_password';
+    CREATE EXTENSION IF NOT EXISTS vector;
+"
+ynh_systemctl --service="${app}_gotrue" --action="start" --log_path="/var/log/$app/${app}_gotrue.log" --wait_until="GoTrue API started"
+(   
+    set -a; source $install_dir/appflowy_gotrue/.env; set +a
+    $install_dir/appflowy_gotrue/appflowy_gotrue admin createuser --admin --confirm $admin_email $password
+)
+ynh_systemctl --service="${app}_gotrue" --action="stop"
 
 # Installing ai
 pushd "$install_dir/appflowy_ai"
@@ -150,12 +203,12 @@ chown -R "$app:www-data" "$install_dir"
 ynh_script_progression "Starting $app's systemd service..."
 
 # Start a systemd service
-ynh_systemctl --service="${app}_minio" --action="start" --log_path="/var/log/$app/${app}_minio.log" --wait_until="Console:"
+ynh_systemctl --service="${app}_minio" --action="start" --log_path="/var/log/$app/${app}_minio.log" --wait_until="WebUI:"
 ynh_systemctl --service="${app}_gotrue" --action="start" --log_path="/var/log/$app/${app}_gotrue.log" --wait_until="GoTrue API started"
+ynh_systemctl --service="${app}_ai" --action="start" --log_path="/var/log/$app/${app}_ai.log" --wait_until="Uvicorn running"
+ynh_systemctl --service="${app}_worker" --action="start" --log_path="/var/log/$app/${app}_worker.log" --wait_until="Starting importer worker"
 ynh_systemctl --service="${app}_cloud" --action="start" --log_path="/var/log/$app/${app}_cloud.log" --wait_until="Server started"
 ynh_systemctl --service="${app}_admin_frontend" --action="start" --log_path="/var/log/$app/${app}_admin_frontend.log" --wait_until="listening on"
-ynh_systemctl --service="${app}_ai" --action="start" --log_path="/var/log/$app/${app}_ai.log"
-ynh_systemctl --service="${app}_worker" --action="start" --log_path="/var/log/$app/${app}_worker.log" --wait_until="Starting importer worker"
 
 #=================================================
 # END OF SCRIPT

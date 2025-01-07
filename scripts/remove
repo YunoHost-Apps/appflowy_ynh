@@ -17,26 +17,31 @@ ynh_script_progression "Removing system configurations related to $app..."
 ynh_config_remove_logrotate
 
 # Remove the service from the list of services known by YunoHost (added from `yunohost service add`)
-if ynh_hide_warnings yunohost service status "${app}_worker" >/dev/null; then
-    yunohost service remove "${app}_worker"
-fi
-ynh_config_remove_systemd "${app}_worker"
-if ynh_hide_warnings yunohost service status "${app}_ai" >/dev/null; then
-    yunohost service remove "${app}_ai"
-fi
-ynh_config_remove_systemd "${app}_ai"
 if ynh_hide_warnings yunohost service status "${app}_admin_frontend" >/dev/null; then
     yunohost service remove "${app}_admin_frontend"
 fi
 ynh_config_remove_systemd "${app}_admin_frontend"
+
 if ynh_hide_warnings yunohost service status "${app}_cloud" >/dev/null; then
     yunohost service remove "${app}_cloud"
 fi
 ynh_config_remove_systemd "${app}_cloud"
+
+if ynh_hide_warnings yunohost service status "${app}_worker" >/dev/null; then
+    yunohost service remove "${app}_worker"
+fi
+ynh_config_remove_systemd "${app}_worker"
+
+if ynh_hide_warnings yunohost service status "${app}_ai" >/dev/null; then
+    yunohost service remove "${app}_ai"
+fi
+ynh_config_remove_systemd "${app}_ai"
+
 if ynh_hide_warnings yunohost service status "${app}_gotrue" >/dev/null; then
     yunohost service remove "${app}_gotrue"
 fi
 ynh_config_remove_systemd "${app}_gotrue"
+
 if ynh_hide_warnings yunohost service status "${app}_minio" >/dev/null; then
     yunohost service remove "${app}_minio"
 fi
@@ -45,10 +50,6 @@ ynh_config_remove_systemd "${app}_minio"
 ynh_config_remove_nginx
 
 # Remove other various files specific to the app... such as:
-
-ynh_safe_rm "/etc/cron.d/$app"
-
-ynh_safe_rm "/etc/$app"
 
 # Remove the notifications user
 yunohost user delete "$ynh_user"

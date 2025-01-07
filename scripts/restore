@@ -44,21 +44,21 @@ ynh_restore "/etc/systemd/system/${app}_minio.service"
 systemctl enable "${app}_minio.service" --quiet
 ynh_restore "/etc/systemd/system/${app}_gotrue.service"
 systemctl enable "${app}_gotrue.service" --quiet
-ynh_restore "/etc/systemd/system/${app}_cloud.service"
-systemctl enable "${app}_cloud.service" --quiet
-ynh_restore "/etc/systemd/system/${app}_admin_frontend.service"
-systemctl enable "${app}_admin_frontend.service" --quiet
 ynh_restore "/etc/systemd/system/${app}_ai.service"
 systemctl enable "${app}_ai.service" --quiet
 ynh_restore "/etc/systemd/system/${app}_worker.service"
 systemctl enable "${app}_worker.service" --quiet
+ynh_restore "/etc/systemd/system/${app}_cloud.service"
+systemctl enable "${app}_cloud.service" --quiet
+ynh_restore "/etc/systemd/system/${app}_admin_frontend.service"
+systemctl enable "${app}_admin_frontend.service" --quiet
 
-yunohost service add ${app}_minio --description="A short description of the app" --log="/var/log/$app/${app}_minio.log"
-yunohost service add ${app}_gotrue --description="A short description of the app" --log="/var/log/$app/${app}_gotrue.log"
-yunohost service add ${app}_cloud --description="A short description of the app" --log="/var/log/$app/${app}_cloud.log"
-yunohost service add ${app}_admin_frontend --description="A short description of the app" --log="/var/log/$app/${app}_admin_frontend.log"
-yunohost service add ${app}_ai --description="A short description of the app" --log="/var/log/$app/${app}_ai.log"
-yunohost service add ${app}_worker --description="A short description of the app" --log="/var/log/$app/${app}_worker.log"
+yunohost service add ${app}_minio --description="AppFlowy-MinIO storage" --log="/var/log/$app/${app}_minio.log"
+yunohost service add ${app}_gotrue --description="AppFlowy-Gotrue Authentication" --log="/var/log/$app/${app}_gotrue.log"
+yunohost service add ${app}_ai --description="AppFlowy-Ai" --log="/var/log/$app/${app}_ai.log"
+yunohost service add ${app}_worker --description="AppFlowy-Worker" --log="/var/log/$app/${app}_worker.log"
+yunohost service add ${app}_cloud --description="AppFlowy-Cloud" --log="/var/log/$app/${app}_cloud.log"
+yunohost service add ${app}_admin_frontend --description="AppFlowy-Admin-Frontend" --log="/var/log/$app/${app}_admin_frontend.log"
 
 ynh_restore "/etc/logrotate.d/$app"
 
@@ -73,12 +73,12 @@ ynh_restore "/var/log/$app/"
 #=================================================
 ynh_script_progression "Reloading NGINX web server and $app's service..."
 
-ynh_systemctl --service="${app}_minio" --action="start" --log_path="/var/log/$app/${app}_minio.log" --wait_until="Console:"
+ynh_systemctl --service="${app}_minio" --action="start" --log_path="/var/log/$app/${app}_minio.log" --wait_until="WebUI:"
 ynh_systemctl --service="${app}_gotrue" --action="start" --log_path="/var/log/$app/${app}_gotrue.log" --wait_until="GoTrue API started"
+ynh_systemctl --service="${app}_ai" --action="start" --log_path="/var/log/$app/${app}_ai.log" --wait_until="Uvicorn running"
+ynh_systemctl --service="${app}_worker" --action="start" --log_path="/var/log/$app/${app}_worker.log" --wait_until="Starting importer worker"
 ynh_systemctl --service="${app}_cloud" --action="start" --log_path="/var/log/$app/${app}_cloud.log" --wait_until="Server started"
 ynh_systemctl --service="${app}_admin_frontend" --action="start" --log_path="/var/log/$app/${app}_admin_frontend.log" --wait_until="listening on"
-ynh_systemctl --service="${app}_ai" --action="start" --log_path="/var/log/$app/${app}_ai.log"
-ynh_systemctl --service="${app}_worker" --action="start" --log_path="/var/log/$app/${app}_worker.log" --wait_until="Starting importer worker"
 
 ynh_systemctl --service=nginx --action=reload
 

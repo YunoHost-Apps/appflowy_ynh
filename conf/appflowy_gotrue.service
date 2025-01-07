@@ -1,13 +1,14 @@
 [Unit]
 Description=AppFlowy-Gotrue
-After=network.target
+Requires=network.target postgresql.service
+After=network.target postgresql.service
 
 [Service]
 Type=simple
 User=__APP__
 Group=__APP__
 WorkingDirectory=__INSTALL_DIR__/appflowy_gotrue/
-EnvironmentFile=__INSTALL_DIR__/.env
+EnvironmentFile=__INSTALL_DIR__/appflowy_gotrue/.env
 ExecStart=__INSTALL_DIR__/appflowy_gotrue/appflowy_gotrue
 StandardOutput=append:/var/log/__APP__/__APP___gotrue.log
 StandardError=inherit
@@ -20,6 +21,8 @@ PrivateTmp=yes
 PrivateDevices=yes
 ProtectHome=false
 ProtectSystem=strict
+
+Slice=__APP__.slice
 
 [Install]
 WantedBy=multi-user.target

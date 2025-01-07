@@ -1,1 +1,1 @@
-This is a dummy description of this app features
+AppFlowy is the AI workspace where you achieve more without losing control of your data

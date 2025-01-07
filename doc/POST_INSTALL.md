@@ -1,7 +1,19 @@
-This is a dummy disclaimer to display after the install
+Download and install the AppFlowy application for you device: https://appflowy.io/downloaded
 
-The app url is <https://__DOMAIN____PATH__>
+Open the AppFlowy application.
 
-The app install dir is `__INSTALL_DIR__`
+Click on 'Quick Start'.
 
-The app id is `__ID__`
+Navigate to the `Settings` page.
+
+On the left sidebar, select `Cloud Setting`.
+
+Choose `AppFlowy Cloud` as your cloud provider.
+
+Enter your server address <https://__DOMAIN____PATH__> in the provided field.
+
+Click Restart to apply the changes.
+
+Go the `Setting` page
+
+On the left sidebar, select `User`
