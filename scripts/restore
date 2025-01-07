@@ -32,6 +32,16 @@ chown -R "$app:$app" "$data_dir"
 #=================================================
 ynh_script_progression "Restoring the PostgreSQL database..."
 
+
+ynh_setup_source --dest_dir="$install_dir/build/pgvector" --source_id="pgvector" 
+# Installing pgvector
+pushd "$install_dir/build/pgvector"
+	make
+	make install
+popd
+
+ynh_safe_rm "$install_dir/build/"
+
 # Initializing Gotrue
 ynh_psql_db_shell $db_name  <<<  "
     CREATE OR REPLACE FUNCTION create_roles(roles text []) RETURNS void LANGUAGE plpgsql AS \$\$
