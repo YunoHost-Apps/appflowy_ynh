@@ -141,42 +141,6 @@ popd
 
 ynh_safe_rm "$install_dir/build/"
 
-# Initializing Gotrue
-ynh_psql_db_shell $db_name  <<<  "
-    CREATE OR REPLACE FUNCTION create_roles(roles text []) RETURNS void LANGUAGE plpgsql AS \$\$
-    DECLARE role_name text;
-    BEGIN FOREACH role_name IN ARRAY roles LOOP IF NOT EXISTS (
-        SELECT 1
-        FROM pg_roles
-        WHERE rolname = role_name
-    ) THEN EXECUTE 'CREATE ROLE ' || role_name;
-    END IF;
-    END LOOP;
-    END;
-    \$\$;
-    DO \$\$ BEGIN IF NOT EXISTS (
-        SELECT
-        FROM pg_catalog.pg_roles
-        WHERE rolname = 'supabase_auth_admin'
-    ) THEN CREATE USER supabase_auth_admin BYPASSRLS NOINHERIT CREATEROLE LOGIN NOREPLICATION;
-    END IF;
-    END \$\$;
-
-    CREATE SCHEMA IF NOT EXISTS auth AUTHORIZATION supabase_auth_admin;
-    GRANT USAGE ON SCHEMA auth TO $db_user;
-    GRANT CREATE ON DATABASE $db_name TO supabase_auth_admin;
-    GRANT supabase_auth_admin TO $db_user;
-    ALTER USER supabase_auth_admin SET search_path = 'auth';
-    ALTER USER supabase_auth_admin WITH PASSWORD '$supabase_password';
-    CREATE EXTENSION IF NOT EXISTS vector;
-"
-ynh_systemctl --service="${app}_gotrue" --action="start" --log_path="/var/log/$app/${app}_gotrue.log" --wait_until="GoTrue API started"
-(   
-    set -a; source $install_dir/appflowy_gotrue/.env; set +a
-    $install_dir/appflowy_gotrue/appflowy_gotrue admin createuser --admin --confirm $admin_email $password
-)
-ynh_systemctl --service="${app}_gotrue" --action="stop"
-
 # Installing ai
 pushd "$install_dir/appflowy_ai"
 	PATH=$path_with_python pip install --no-cache-dir poetry
