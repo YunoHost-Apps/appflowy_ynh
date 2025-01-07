@@ -150,9 +150,9 @@ ynh_python_install() {
 
     # Set environment for Python users
     echo "#pyenv
-export PYENV_ROOT=$PYENV_INSTALL_DIR
-export PATH=\"$PYENV_INSTALL_DIR/bin:$PATH\"
-eval \"\$(pyenv init -)\"
+#export PYENV_ROOT=$PYENV_INSTALL_DIR
+#export PATH=\"$PYENV_INSTALL_DIR/bin:$PATH\"
+#eval \"\$(pyenv init -)\"
 #pyenv" > /etc/profile.d/pyenv.sh
 
     # Load the environment
