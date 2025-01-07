@@ -18,7 +18,7 @@ No se debe editar a mano.
 
 ## Descripción general
 
-This is a dummy description of this app features
+AppFlowy is the AI workspace where you achieve more without losing control of your data
 
 
 **Versión actual:** 0.9.2~ynh1
