@@ -12,33 +12,10 @@ test_format = 1.0
     # Default args to use for install
     # -------------------------------
 
-    ## By default, the CI will automagically fill the 'standard' args
-    ## such as domain, path, admin, is_public and password with relevant values
-    ## and also install args with a "default" provided in the manifest..
-    ## It should only make sense to declare custom args here for args with no default values
-    ## NB: you should NOT need those lines unless for custom questions with no obvious/default value
-
-    # args.language = "fr_FR"
-    # args.multisite = 0
     args.openai_api_key = "01234567890123456789"
 
     # -------------------------------
     # Commits to test upgrade from
     # -------------------------------
-    
-    ## 00a1a6e7 is part of commit SHA, preferrably from 'master' branch
-    ## that points to valid install of previous version
 
-    # test_upgrade_from.00a1a6e7.name = "Upgrade from 5.4"
-    # test_upgrade_from.00a1a6e7.args.foo = "bar"
-
-
-## This is an additional test suite
-# [some_additional_testsuite]
-
-    ## On additional tests suites, you can decide to run only specific tests
-
-    # only = ["install.subdir"]
-
-    # args.language = "en_GB"
-    # args.multisite = 1
+    test_upgrade_from.0d92a63b5beca10076ecec8b121a17f3aa676307.name = "Upgrade from 0.9.2~ynh1"

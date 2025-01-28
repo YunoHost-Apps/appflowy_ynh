@@ -21,7 +21,7 @@ Ini TIDAK boleh diedit dengan tangan.
 AppFlowy is the AI workspace where you achieve more without losing control of your data
 
 
-**Versi terkirim:** 0.9.2~ynh1
+**Versi terkirim:** 0.9.18~ynh1
 
 ## Tangkapan Layar
 
