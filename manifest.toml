@@ -6,7 +6,7 @@ id = "appflowy"
 name = "AppFlowy"
 description.en = "Bring projects, wikis, and teams together with AI"
 
-version = "0.9.2~ynh1"
+version = "0.9.18~ynh1"
 
 maintainers = ["yalh76"]
 
@@ -18,7 +18,7 @@ userdoc = "https://docs.appflowy.io/docs/guides/appflowy/self-hosting-appflowy"
 code = "https://github.com/AppFlowy-IO/AppFlowy-Cloud"
 
 [integration]
-yunohost = ">= 11.2.30"
+yunohost = ">= 12.0"
 helpers_version = "2.1"
 architectures = "all"
 multi_instance = false
@@ -59,8 +59,8 @@ ram.runtime = "50M"
     # This will pre-fetch the asset which can then be deployed during the install/upgrade scripts with :
     #    ynh_setup_source --dest_dir="$install_dir"
     # You can also define other assets than "main" and add --source_id="foobar" in the previous command
-    url = "https://github.com/AppFlowy-IO/AppFlowy-Cloud/archive/refs/tags/0.9.2.tar.gz"
-    sha256 = "a46631b9db5c3919672116c35f419898ee2a4f7f1921c869838a9fd91f89fcae"
+    url = "https://github.com/AppFlowy-IO/AppFlowy-Cloud/archive/refs/tags/0.9.18.tar.gz"
+    sha256 = "7a31ec7efc15fd8a342a07e2fd2dbe4e164493383c648905bdaf328f97af1bef"
     prefetch = false
     autoupdate.strategy = "latest_github_tag"
     
@@ -108,7 +108,7 @@ ram.runtime = "50M"
     [resources.apt]
     # This will automatically install/uninstall the following apt packages
     # and implicitly define the $phpversion setting as 8.0 (if phpX.Y-foobar dependencies are listed)
-    packages = "rsync, openssl, libc6, libssl-dev, postgresql, redis, gcc, make, postgresql-server-dev-13\\|postgresql-server-dev-15\\|postgresql-server-dev-17, build-essential, libssl-dev, zlib1g-dev, libbz2-dev, libreadline-dev, libsqlite3-dev, curl, git, libncursesw5-dev, xz-utils, tk-dev, libxml2-dev, libxmlsec1-dev, libffi-dev, liblzma-dev, libpq-dev"
+    packages = "rsync, openssl, libc6, libssl-dev, postgresql, redis, gcc, make, postgresql-server-dev-15\\|postgresql-server-dev-17, build-essential, libssl-dev, zlib1g-dev, libbz2-dev, libreadline-dev, libsqlite3-dev, curl, git, libncursesw5-dev, xz-utils, tk-dev, libxml2-dev, libxmlsec1-dev, libffi-dev, liblzma-dev, libpq-dev"
 
     [resources.database]
     # This will automatically provision/deprovison a DB and store the corresponding credentials in settings $db_user, $db_name, $db_pwd
