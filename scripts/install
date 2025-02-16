@@ -146,8 +146,10 @@ ynh_script_progression "Building app..."
 
 # Installing pgvector
 pushd "$install_dir/build/pgvector"
-	make
-	make install
+    export PG_MAJOR_VERSION=$(sudo --login --user=postgres psql -t -c "SELECT current_setting('server_version_num')::int / 10000;" | xargs)
+    export PG_CONFIG="/usr/lib/postgresql/$PG_MAJOR_VERSION/bin/pg_config"
+    make
+    make install
 popd
 
 ynh_safe_rm "$install_dir/build/"

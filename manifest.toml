@@ -6,7 +6,7 @@ id = "appflowy"
 name = "AppFlowy"
 description.en = "Bring projects, wikis, and teams together with AI"
 
-version = "0.9.18~ynh1"
+version = "0.9.18~ynh2"
 
 maintainers = ["yalh76"]
 

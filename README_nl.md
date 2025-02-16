@@ -21,7 +21,7 @@ Hij mag NIET handmatig aangepast worden.
 AppFlowy is the AI workspace where you achieve more without losing control of your data
 
 
-**Geleverde versie:** 0.9.18~ynh1
+**Geleverde versie:** 0.9.18~ynh2
 
 ## Schermafdrukken
 
