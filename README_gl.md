@@ -21,7 +21,7 @@ NON debe editarse manualmente.
 AppFlowy is the AI workspace where you achieve more without losing control of your data
 
 
-**Versión proporcionada:** 0.9.18~ynh1
+**Versión proporcionada:** 0.9.18~ynh2
 
 ## Capturas de pantalla
 
