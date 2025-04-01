@@ -18,7 +18,7 @@ userdoc = "https://docs.appflowy.io/docs/guides/appflowy/self-hosting-appflowy"
 code = "https://github.com/AppFlowy-IO/AppFlowy-Cloud"
 
 [integration]
-yunohost = ">= 12.0"
+yunohost = ">= 11.3.0"
 helpers_version = "2.1"
 architectures = "all"
 multi_instance = false
@@ -79,6 +79,12 @@ ram.runtime = "50M"
     [resources.sources.pgvector]
     url = "https://github.com/pgvector/pgvector/archive/refs/tags/v0.8.0.tar.gz"
     sha256 = "867a2c328d4928a5a9d6f052cd3bc78c7d60228a9b914ad32aa3db88e9de27b0"
+
+    [resources.sources.frontend]
+    url = "https://github.com/AppFlowy-IO/AppFlowy-Web/archive/refs/tags/v0.1.12.tar.gz"
+    sha256 = "e3a49f7960b10a5ba9522200edcd901cf1b06b8c0d730f57318e661f83b4e26c"
+    prefetch = false
+    autoupdate.strategy = "latest_github_tag"
 
     [resources.system_user]
     # This will provision/deprovision a unix system user
