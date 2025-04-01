@@ -59,8 +59,8 @@ ram.runtime = "50M"
     # This will pre-fetch the asset which can then be deployed during the install/upgrade scripts with :
     #    ynh_setup_source --dest_dir="$install_dir"
     # You can also define other assets than "main" and add --source_id="foobar" in the previous command
-    url = "https://github.com/AppFlowy-IO/AppFlowy-Cloud/archive/refs/tags/0.9.18.tar.gz"
-    sha256 = "7a31ec7efc15fd8a342a07e2fd2dbe4e164493383c648905bdaf328f97af1bef"
+    url = "https://github.com/AppFlowy-IO/AppFlowy-Cloud/archive/refs/tags/0.9.35.tar.gz"
+    sha256 = "5f470280fd7cb5e46efc508524ef3fd0def202caf0856bff249e67b7c625887e"
     prefetch = false
     autoupdate.strategy = "latest_github_tag"
     
