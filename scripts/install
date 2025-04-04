@@ -49,6 +49,8 @@ chmod +x "$install_dir/appflowy_minio/minio"
 ynh_setup_source --dest_dir="$install_dir/build/pgvector" --source_id="pgvector" 
 
 docker_version="$(ynh_app_upstream_version)"
+#frontend_url="$(ynh_read_manifest 'resources.sources.frontend.url')"
+#docker_version_web="$(echo "$frontend_url" | sed -E 's/.*\/v([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
 docker_version_web=0.1.13
 
 ynh_docker_image_extract --dest_dir="$install_dir/build/gotrue/" --image_spec="appflowyinc/gotrue:$docker_version"
@@ -85,7 +87,7 @@ mkdir -p $install_dir/appflowy_web/
 
 ynh_python_install
 
-ynh_install_nodejs --nodejs_version="$NODEJS_VERSION"
+ynh_nodejs_install
 
 #=================================================
 # APP INITIAL CONFIGURATION
@@ -214,7 +216,6 @@ popd
 
 # Installing web UI
 pushd "$install_dir/appflowy_web_ui"
-    ynh_use_nodejs
     env $ynh_node_load_PATH corepack enable
     env $ynh_node_load_PATH corepack prepare pnpm@8.5.0 --activate
     ynh_exec_warn_less ynh_exec_as "$app" env "$ynh_node_load_PATH" NODE_ENV=production pnpm install

@@ -73,7 +73,7 @@ ynh_safe_rm "$install_dir/build/admin_frontend/"
 
 ynh_python_install
 
-ynh_install_nodejs --nodejs_version="$NODEJS_VERSION"
+ynh_nodejs_install
 
 #=================================================
 # UPDATE A CONFIG FILE
@@ -164,7 +164,6 @@ popd
 
 # Installing web UI
 pushd "$install_dir/appflowy_web_ui"
-    ynh_use_nodejs
     env $ynh_node_load_PATH corepack enable
     env $ynh_node_load_PATH corepack prepare pnpm@8.5.0 --activate
     ynh_exec_warn_less ynh_exec_as "$app" env "$ynh_node_load_PATH" NODE_ENV=production pnpm install

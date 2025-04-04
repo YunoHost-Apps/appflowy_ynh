@@ -4,5 +4,5 @@
 # COMMON VARIABLES AND CUSTOM HELPERS
 #=================================================
 
-NODEJS_VERSION="20.11.30"
+nodejs_version="20.11.30"
 python_version="3.12"
