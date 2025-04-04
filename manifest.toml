@@ -6,7 +6,7 @@ id = "appflowy"
 name = "AppFlowy"
 description.en = "Bring projects, wikis, and teams together with AI"
 
-version = "0.9.18~ynh2"
+version = "0.9.37~ynh2"
 
 maintainers = ["yalh76"]
 
@@ -61,6 +61,12 @@ ram.runtime = "50M"
     # You can also define other assets than "main" and add --source_id="foobar" in the previous command
     url = "https://github.com/AppFlowy-IO/AppFlowy-Cloud/archive/refs/tags/0.9.37.tar.gz"
     sha256 = "b1dbea89b2f77e7d083940bc2eec3947a9cb93f195f7a08dc7d4b332548360e2"
+    prefetch = false
+    autoupdate.strategy = "latest_github_tag"
+
+    [resources.sources.frontend]
+    url = "https://github.com/AppFlowy-IO/AppFlowy-Web/archive/refs/tags/v0.1.13.tar.gz"
+    sha256 = "67724374d650fa15e5f23c76b84c7c4f4197f82911a07a667621d9dc78a788fb"
     prefetch = false
     autoupdate.strategy = "latest_github_tag"
     
