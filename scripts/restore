@@ -100,6 +100,7 @@ yunohost service add ${app}_ai --description="AppFlowy-Ai" --log="/var/log/$app/
 yunohost service add ${app}_worker --description="AppFlowy-Worker" --log="/var/log/$app/${app}_worker.log"
 yunohost service add ${app}_cloud --description="AppFlowy-Cloud" --log="/var/log/$app/${app}_cloud.log"
 yunohost service add ${app}_admin_frontend --description="AppFlowy-Admin-Frontend" --log="/var/log/$app/${app}_admin_frontend.log"
+yunohost service add ${app}_web --description="AppFlowy-Web" --log="/var/log/$app/${app}_web.log"
 
 ynh_restore "/etc/logrotate.d/$app"
 
@@ -130,6 +131,7 @@ ynh_systemctl --service="${app}_ai" --action="start" --log_path="/var/log/$app/$
 ynh_systemctl --service="${app}_worker" --action="start" --log_path="/var/log/$app/${app}_worker.log" --wait_until="Starting importer worker"
 ynh_systemctl --service="${app}_cloud" --action="start" --log_path="/var/log/$app/${app}_cloud.log" --wait_until="Server started"
 ynh_systemctl --service="${app}_admin_frontend" --action="start" --log_path="/var/log/$app/${app}_admin_frontend.log" --wait_until="listening on"
+ynh_systemctl --service="${app}_web" --action="start" --log_path="/var/log/$app/${app}_web.log" --wait_until=""
 
 ynh_systemctl --service=nginx --action=reload
 
