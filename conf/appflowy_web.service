@@ -8,7 +8,9 @@ Type=simple
 User=__APP__
 Group=__APP__
 WorkingDirectory=__INSTALL_DIR__/appflowy_web/
-#EnvironmentFile=__INSTALL_DIR__/appflowy_web/.env
+Environment="NODE_ENV=production"
+Environment="PATH=__PATH_WITH_NODEJS__"
+EnvironmentFile=__INSTALL_DIR__/appflowy_web/.env
 ExecStart=__NODEJS_DIR__/pnpm run start
 TimeoutSec=60
 Restart=always
