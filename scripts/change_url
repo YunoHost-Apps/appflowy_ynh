@@ -79,7 +79,7 @@ ynh_systemctl --service="${app}_ai" --action="start" --log_path="/var/log/$app/$
 ynh_systemctl --service="${app}_worker" --action="start" --log_path="/var/log/$app/${app}_worker.log" --wait_until="Starting importer worker"
 ynh_systemctl --service="${app}_cloud" --action="start" --log_path="/var/log/$app/${app}_cloud.log" --wait_until="Server started"
 ynh_systemctl --service="${app}_admin_frontend" --action="start" --log_path="/var/log/$app/${app}_admin_frontend.log" --wait_until="listening on"
-ynh_systemctl --service="${app}_web" --action="start" --log_path="/var/log/$app/${app}_web.log" --wait_until=""
+ynh_systemctl --service="${app}_web" --action="start" --log_path="/var/log/$app/${app}_web.log" --wait_until="vite preview"
 
 #=================================================
 # END OF SCRIPT
