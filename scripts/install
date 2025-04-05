@@ -80,10 +80,11 @@ cp $install_dir/build/admin_frontend/usr/local/bin/admin_frontend $install_dir/a
 rsync -a --delete $install_dir/build/admin_frontend/app/assets/ $install_dir/appflowy_admin_frontend/assets/
 ynh_safe_rm "$install_dir/build/admin_frontend/"
 
-ynh_docker_image_extract --dest_dir="$install_dir/build/appflowy_web/" --image_spec="appflowyinc/appflowy_web:$docker_version_web"
-mkdir -p $install_dir/appflowy_web/
+#ynh_docker_image_extract --dest_dir="$install_dir/build/appflowy_web/" --image_spec="appflowyinc/appflowy_web:$docker_version_web"
+#mkdir -p $install_dir/appflowy_web/
 #cp $install_dir/build/appflowy_cloud/usr/local/bin/appflowy_cloud $install_dir/appflowy_cloud/appflowy_cloud
 #ynh_safe_rm "$install_dir/build/appflowy_cloud/"
+ynh_setup_source --dest_dir="$install_dir/appflowy_web" --source_id="frontend"
 
 ynh_python_install
 
@@ -215,11 +216,11 @@ pushd "$install_dir/appflowy_ai"
 popd
 
 # Installing web UI
-pushd "$install_dir/appflowy_web_ui"
+pushd "$install_dir/appflowy_web"
     env $ynh_node_load_PATH corepack enable
     env $ynh_node_load_PATH corepack prepare pnpm@8.5.0 --activate
-    ynh_exec_warn_less ynh_exec_as "$app" env "$ynh_node_load_PATH" NODE_ENV=production pnpm install
-    ynh_exec_warn_less ynh_exec_as "$app" env "$ynh_node_load_PATH" NODE_ENV=production pnpm run build
+    ynh_hide_warnings ynh_exec_as_app env "$ynh_node_load_PATH" NODE_ENV=production pnpm install
+    ynh_hide_warnings ynh_exec_as_app env "$ynh_node_load_PATH" NODE_ENV=production pnpm run build
 popd
 
 chown -R "$app:www-data" "$install_dir"
