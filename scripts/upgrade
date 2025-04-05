@@ -64,6 +64,7 @@ ynh_docker_image_extract --dest_dir="$install_dir/build/admin_frontend/" --image
 mkdir -p $install_dir/appflowy_admin_frontend/assets/
 cp $install_dir/build/admin_frontend/usr/local/bin/admin_frontend $install_dir/appflowy_admin_frontend/appflowy_admin_frontend
 rsync -a --delete $install_dir/build/admin_frontend/app/assets/ $install_dir/appflowy_admin_frontend/assets/
+ynh_safe_rm "$install_dir/build/admin_frontend/"
 
 #ynh_docker_image_extract --dest_dir="$install_dir/build/appflowy_web/" --image_spec="appflowyinc/appflowy_web:$docker_version_web"
 #mkdir -p $install_dir/appflowy_web/

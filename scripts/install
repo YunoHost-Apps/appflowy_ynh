@@ -215,6 +215,8 @@ pushd "$install_dir/appflowy_ai"
 	PATH=$path_with_python poetry config virtualenvs.create false && PATH=$path_with_python poetry install --no-root
 popd
 
+chown -R "$app:www-data" "$install_dir"
+
 # Installing web UI
 pushd "$install_dir/appflowy_web"
     ynh_hide_warnings npm install --global corepack@latest
@@ -223,9 +225,7 @@ pushd "$install_dir/appflowy_web"
     ynh_hide_warnings ynh_exec_as_app env NODE_ENV=production pnpm install
     ynh_hide_warnings ynh_exec_as_app env NODE_ENV=production pnpm run build
 popd
-chown "$app:www-data" "$install_dir/appflowy_web/package.json"
-
-chown -R "$app:www-data" "$install_dir"
+#chown "$app:$app" "$install_dir/appflowy_web/package.json"
 
 #=================================================
 # START SYSTEMD SERVICE
