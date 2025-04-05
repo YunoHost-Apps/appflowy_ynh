@@ -11,7 +11,7 @@ WorkingDirectory=__INSTALL_DIR__/appflowy_web/
 Environment="NODE_ENV=production"
 Environment="PATH=__PATH_WITH_NODEJS__"
 EnvironmentFile=__INSTALL_DIR__/appflowy_web/.env
-ExecStart=__NODEJS_DIR__/pnpm run start
+ExecStart=__NODEJS_DIR__/npx vite preview --port __PORT_WEB__
 TimeoutSec=60
 Restart=always
 StandardOutput=append:/var/log/__APP__/__APP__.log

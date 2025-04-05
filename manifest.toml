@@ -110,7 +110,7 @@ ram.runtime = "50M"
     cloud.default = 8000
     admin_frontend.default = 3000
     ai.default = 5001
-    web.default = 3000
+    web.default = 3001
 
     [resources.apt]
     # This will automatically install/uninstall the following apt packages
