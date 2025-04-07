@@ -93,6 +93,8 @@ ynh_restore "/etc/systemd/system/${app}_cloud.service"
 systemctl enable "${app}_cloud.service" --quiet
 ynh_restore "/etc/systemd/system/${app}_admin_frontend.service"
 systemctl enable "${app}_admin_frontend.service" --quiet
+ynh_restore "/etc/systemd/system/${app}_aweb.service"
+systemctl enable "${app}_web.service" --quiet
 
 yunohost service add ${app}_minio --description="AppFlowy-MinIO storage" --log="/var/log/$app/${app}_minio.log"
 yunohost service add ${app}_gotrue --description="AppFlowy-Gotrue Authentication" --log="/var/log/$app/${app}_gotrue.log"
