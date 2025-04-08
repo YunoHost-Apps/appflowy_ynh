@@ -122,6 +122,15 @@ popd
 
 chown -R "$app:www-data" "$install_dir"
 
+# Installing web
+ynh_nodejs_install
+pushd "$install_dir/appflowy_web"
+    ynh_hide_warnings corepack enable
+    ynh_hide_warnings ynh_exec_as_app corepack prepare pnpm@8.5.0 --activate
+    ynh_hide_warnings ynh_exec_as_app env pnpm install
+    ynh_hide_warnings ynh_exec_as_app env pnpm run build
+popd
+
 #=================================================
 # RELOAD NGINX AND PHP-FPM OR THE APP SERVICE
 #=================================================
