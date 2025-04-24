@@ -6,7 +6,7 @@ id = "appflowy"
 name = "AppFlowy"
 description.en = "Bring projects, wikis, and teams together with AI"
 
-version = "0.9.38~ynh1"
+version = "0.9.44~ynh1"
 
 maintainers = ["yalh76"]
 
@@ -50,37 +50,32 @@ ram.runtime = "50M"
     type = "text"
 
 [resources]
-    # See the packaging documentation for the full set
-    # of explanation regarding the behavior and properties for each of those
 
     [resources.sources]
 
     [resources.sources.main]
-    # This will pre-fetch the asset which can then be deployed during the install/upgrade scripts with :
-    #    ynh_setup_source --dest_dir="$install_dir"
-    # You can also define other assets than "main" and add --source_id="foobar" in the previous command
-    url = "https://github.com/AppFlowy-IO/AppFlowy-Cloud/archive/refs/tags/0.9.38.tar.gz"
-    sha256 = "0ea883457e753988bd853b840ba9272f3829b0f10ffe541e74adf5e913e42182"
+    url = "https://github.com/AppFlowy-IO/AppFlowy-Cloud/archive/refs/tags/0.9.44.tar.gz"
+    sha256 = "401e508cd7ce35df875bafc83cb0cfebbd322411f26c9fb726e99c0d684c619a"
     prefetch = false
     autoupdate.strategy = "latest_github_tag"
 
     [resources.sources.frontend]
     url = "https://github.com/AppFlowy-IO/AppFlowy-Web/archive/refs/tags/v0.1.13.tar.gz"
     sha256 = "67724374d650fa15e5f23c76b84c7c4f4197f82911a07a667621d9dc78a788fb"
-    prefetch = false
-    autoupdate.strategy = "latest_github_tag"
     
     [resources.sources.minio]
     extract = false
     in_subdir = false
     prefetch = false
-    autoupdate.strategy = "latest_github_tag"
-
+    
     arm64.url = "https://dl.min.io/server/minio/release/linux-arm64/archive/minio.RELEASE.2024-12-18T13-15-44Z"
     arm64.sha256 = "455c9b3093b7c1e6153c85cfd745c7c401a92497346ba24dbe45775c7b3ab1cd"
 
     amd64.url = "https://dl.min.io/server/minio/release/linux-amd64/archive/minio.RELEASE.2024-12-18T13-15-44Z"
     amd64.sha256 = "88182336ab5793488f2caad54846056b330f0dcb5c488b60d52434beeebae3ca"
+
+    # Autoupdate cannot work because minio assets are on a specific website ...
+    #autoupdate.strategy = "latest_github_tag"
 
     [resources.sources.pgvector]
     url = "https://github.com/pgvector/pgvector/archive/refs/tags/v0.8.0.tar.gz"
