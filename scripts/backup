@@ -36,6 +36,7 @@ ynh_backup "/etc/systemd/system/${app}_ai.service"
 ynh_backup "/etc/systemd/system/${app}_worker.service"
 ynh_backup "/etc/systemd/system/${app}_cloud.service"
 ynh_backup "/etc/systemd/system/${app}_admin_frontend.service"
+ynh_backup "/etc/systemd/system/${app}_web.service"
 
 # Backup the logrotate configuration
 ynh_backup "/etc/logrotate.d/$app"
