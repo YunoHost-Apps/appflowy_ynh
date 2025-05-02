@@ -6,7 +6,7 @@ id = "appflowy"
 name = "AppFlowy"
 description.en = "Bring projects, wikis, and teams together with AI"
 
-version = "0.9.46~ynh1"
+version = "0.9.47~ynh1"
 
 maintainers = ["yalh76"]
 
@@ -59,8 +59,8 @@ ram.runtime = "50M"
     # This will pre-fetch the asset which can then be deployed during the install/upgrade scripts with :
     #    ynh_setup_source --dest_dir="$install_dir"
     # You can also define other assets than "main" and add --source_id="foobar" in the previous command
-    url = "https://github.com/AppFlowy-IO/AppFlowy-Cloud/archive/refs/tags/0.9.46.tar.gz"
-    sha256 = "5bf9e652c430dee53acb073765e93e150a2f6b83cb4a234530757e3d050b18f9"
+    url = "https://github.com/AppFlowy-IO/AppFlowy-Cloud/archive/refs/tags/0.9.47.tar.gz"
+    sha256 = "17daee97183b470dce983a28b19e827826d88d730aedf6a144b4f2bbf84ad899"
     prefetch = false
     autoupdate.strategy = "latest_github_tag"
     
