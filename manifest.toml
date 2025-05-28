@@ -6,7 +6,7 @@ id = "appflowy"
 name = "AppFlowy"
 description.en = "Bring projects, wikis, and teams together with AI"
 
-version = "0.9.44~ynh1"
+version = "0.9.52~ynh1"
 
 maintainers = ["yalh76"]
 
@@ -54,8 +54,8 @@ ram.runtime = "50M"
     [resources.sources]
 
     [resources.sources.main]
-    url = "https://github.com/AppFlowy-IO/AppFlowy-Cloud/archive/refs/tags/0.9.44.tar.gz"
-    sha256 = "401e508cd7ce35df875bafc83cb0cfebbd322411f26c9fb726e99c0d684c619a"
+    url = "https://github.com/AppFlowy-IO/AppFlowy-Cloud/archive/refs/tags/0.9.52.tar.gz"
+    sha256 = "b22e0e7467c542d1b626756b652bd21c12f869928d09ef030919a46fb1f40322"
     prefetch = false
     autoupdate.strategy = "latest_github_tag"
 
