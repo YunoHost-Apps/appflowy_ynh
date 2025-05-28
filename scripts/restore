@@ -32,7 +32,6 @@ chown -R "$app:$app" "$data_dir"
 #=================================================
 ynh_script_progression "Restoring the PostgreSQL database..."
 
-
 ynh_setup_source --dest_dir="$install_dir/build/pgvector" --source_id="pgvector" 
 # Installing pgvector
 pushd "$install_dir/build/pgvector"
