@@ -93,6 +93,8 @@ ynh_restore "/etc/systemd/system/${app}_cloud.service"
 systemctl enable "${app}_cloud.service" --quiet
 ynh_restore "/etc/systemd/system/${app}_admin_frontend.service"
 systemctl enable "${app}_admin_frontend.service" --quiet
+ynh_restore "/etc/systemd/system/${app}_web.service"
+systemctl enable "${app}_web.service" --quiet
 
 yunohost service add ${app}_minio --description="AppFlowy-MinIO storage" --log="/var/log/$app/${app}_minio.log"
 yunohost service add ${app}_gotrue --description="AppFlowy-Gotrue Authentication" --log="/var/log/$app/${app}_gotrue.log"
@@ -100,6 +102,7 @@ yunohost service add ${app}_ai --description="AppFlowy-Ai" --log="/var/log/$app/
 yunohost service add ${app}_worker --description="AppFlowy-Worker" --log="/var/log/$app/${app}_worker.log"
 yunohost service add ${app}_cloud --description="AppFlowy-Cloud" --log="/var/log/$app/${app}_cloud.log"
 yunohost service add ${app}_admin_frontend --description="AppFlowy-Admin-Frontend" --log="/var/log/$app/${app}_admin_frontend.log"
+yunohost service add ${app}_web --description="AppFlowy-Web" --log="/var/log/$app/${app}_web.log"
 
 ynh_restore "/etc/logrotate.d/$app"
 
@@ -119,6 +122,15 @@ popd
 
 chown -R "$app:www-data" "$install_dir"
 
+# Installing web
+ynh_nodejs_install
+pushd "$install_dir/appflowy_web"
+    ynh_hide_warnings corepack enable
+    ynh_hide_warnings ynh_exec_as_app corepack prepare pnpm@8.5.0 --activate
+    ynh_hide_warnings ynh_exec_as_app env pnpm install
+    ynh_hide_warnings ynh_exec_as_app env pnpm run build
+popd
+
 #=================================================
 # RELOAD NGINX AND PHP-FPM OR THE APP SERVICE
 #=================================================
@@ -130,6 +142,7 @@ ynh_systemctl --service="${app}_ai" --action="start" --log_path="/var/log/$app/$
 ynh_systemctl --service="${app}_worker" --action="start" --log_path="/var/log/$app/${app}_worker.log" --wait_until="Starting importer worker"
 ynh_systemctl --service="${app}_cloud" --action="start" --log_path="/var/log/$app/${app}_cloud.log" --wait_until="Server started"
 ynh_systemctl --service="${app}_admin_frontend" --action="start" --log_path="/var/log/$app/${app}_admin_frontend.log" --wait_until="listening on"
+ynh_systemctl --service="${app}_web" --action="start" --log_path="/var/log/$app/${app}_web.log"
 
 ynh_systemctl --service=nginx --action=reload
 

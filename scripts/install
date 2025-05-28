@@ -49,6 +49,9 @@ chmod +x "$install_dir/appflowy_minio/minio"
 ynh_setup_source --dest_dir="$install_dir/build/pgvector" --source_id="pgvector" 
 
 docker_version="$(ynh_app_upstream_version)"
+#frontend_url="$(ynh_read_manifest 'resources.sources.frontend.url')"
+#docker_version_web="$(echo "$frontend_url" | sed -E 's/.*\/v([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
+docker_version_web=0.1.13
 
 ynh_docker_image_extract --dest_dir="$install_dir/build/gotrue/" --image_spec="appflowyinc/gotrue:$docker_version"
 mkdir -p $install_dir/appflowy_gotrue/migrations/
@@ -77,7 +80,15 @@ cp $install_dir/build/admin_frontend/usr/local/bin/admin_frontend $install_dir/a
 rsync -a --delete $install_dir/build/admin_frontend/app/assets/ $install_dir/appflowy_admin_frontend/assets/
 ynh_safe_rm "$install_dir/build/admin_frontend/"
 
+#ynh_docker_image_extract --dest_dir="$install_dir/build/appflowy_web/" --image_spec="appflowyinc/appflowy_web:$docker_version_web"
+#mkdir -p $install_dir/appflowy_web/
+#cp $install_dir/build/appflowy_cloud/usr/local/bin/appflowy_cloud $install_dir/appflowy_cloud/appflowy_cloud
+#ynh_safe_rm "$install_dir/build/appflowy_cloud/"
+ynh_setup_source --dest_dir="$install_dir/appflowy_web" --source_id="frontend"
+
 ynh_python_install
+
+ynh_nodejs_install
 
 #=================================================
 # APP INITIAL CONFIGURATION
@@ -109,6 +120,10 @@ ynh_config_add --template="appflowy_admin_frontend.env" --destination="$install_
 chmod 400 "$install_dir/appflowy_admin_frontend/.env"
 chown "$app:$app" "$install_dir/appflowy_admin_frontend/.env"
 
+ynh_config_add --template="appflowy_web.env" --destination="$install_dir/appflowy_web/.env"
+chmod 400 "$install_dir/appflowy_web/.env"
+chown "$app:$app" "$install_dir/appflowy_web/.env"
+
 #=================================================
 # SYSTEM CONFIGURATION
 #=================================================
@@ -135,6 +150,9 @@ yunohost service add ${app}_cloud --description="AppFlowy-Cloud" --log="/var/log
 
 ynh_config_add_systemd --service="${app}_admin_frontend" --template="appflowy_admin_frontend.service"
 yunohost service add ${app}_admin_frontend --description="AppFlowy-Admin-Frontend" --log="/var/log/$app/${app}_admin_frontend.log"
+
+ynh_config_add_systemd --service="${app}_web" --template="appflowy_web.service"
+yunohost service add ${app}_web --description="AppFlowy-Web" --log="/var/log/$app/${app}_web.log"
 
 # Use logrotate to manage application logfile(s)
 ynh_config_add_logrotate
@@ -199,6 +217,14 @@ popd
 
 chown -R "$app:www-data" "$install_dir"
 
+# Installing web UI
+pushd "$install_dir/appflowy_web"
+    ynh_hide_warnings corepack enable
+    ynh_hide_warnings ynh_exec_as_app corepack prepare pnpm@8.5.0 --activate
+    ynh_hide_warnings ynh_exec_as_app env pnpm install
+    ynh_hide_warnings ynh_exec_as_app env pnpm run build
+popd
+
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
@@ -211,6 +237,7 @@ ynh_systemctl --service="${app}_ai" --action="start" --log_path="/var/log/$app/$
 ynh_systemctl --service="${app}_worker" --action="start" --log_path="/var/log/$app/${app}_worker.log" --wait_until="Starting importer worker"
 ynh_systemctl --service="${app}_cloud" --action="start" --log_path="/var/log/$app/${app}_cloud.log" --wait_until="Server started"
 ynh_systemctl --service="${app}_admin_frontend" --action="start" --log_path="/var/log/$app/${app}_admin_frontend.log" --wait_until="listening on"
+ynh_systemctl --service="${app}_web" --action="start" --log_path="/var/log/$app/${app}_web.log"
 
 #=================================================
 # END OF SCRIPT
