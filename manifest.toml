@@ -5,8 +5,9 @@ packaging_format = 2
 id = "appflowy"
 name = "AppFlowy"
 description.en = "Bring projects, wikis, and teams together with AI"
+description.fr = "Rassembler des projets, des wikis et des équipes grâce à l'IA"
 
-version = "0.9.47~ynh1"
+version = "0.9.53~ynh1"
 
 maintainers = ["yalh76"]
 
@@ -18,7 +19,7 @@ userdoc = "https://docs.appflowy.io/docs/guides/appflowy/self-hosting-appflowy"
 code = "https://github.com/AppFlowy-IO/AppFlowy-Cloud"
 
 [integration]
-yunohost = ">= 12.0"
+yunohost = ">= 12.0.9"
 helpers_version = "2.1"
 architectures = "all"
 multi_instance = false
@@ -50,19 +51,18 @@ ram.runtime = "50M"
     type = "text"
 
 [resources]
-    # See the packaging documentation for the full set
-    # of explanation regarding the behavior and properties for each of those
 
     [resources.sources]
 
     [resources.sources.main]
-    # This will pre-fetch the asset which can then be deployed during the install/upgrade scripts with :
-    #    ynh_setup_source --dest_dir="$install_dir"
-    # You can also define other assets than "main" and add --source_id="foobar" in the previous command
-    url = "https://github.com/AppFlowy-IO/AppFlowy-Cloud/archive/refs/tags/0.9.47.tar.gz"
-    sha256 = "17daee97183b470dce983a28b19e827826d88d730aedf6a144b4f2bbf84ad899"
+    url = "https://github.com/AppFlowy-IO/AppFlowy-Cloud/archive/refs/tags/0.9.53.tar.gz"
+    sha256 = "c1e90ef66e83f99f0a7ea6a8008c5a42a6c957604fb3d9fbda7843b8bdc7f237"
     prefetch = false
     autoupdate.strategy = "latest_github_tag"
+
+    [resources.sources.frontend]
+    url = "https://github.com/AppFlowy-IO/AppFlowy-Web/archive/refs/tags/v0.1.13.tar.gz"
+    sha256 = "67724374d650fa15e5f23c76b84c7c4f4197f82911a07a667621d9dc78a788fb"
     
     [resources.sources.minio]
     extract = false
@@ -83,19 +83,12 @@ ram.runtime = "50M"
     sha256 = "867a2c328d4928a5a9d6f052cd3bc78c7d60228a9b914ad32aa3db88e9de27b0"
 
     [resources.system_user]
-    # This will provision/deprovision a unix system user
 
     [resources.install_dir]
-    # This will create/remove the install dir as /var/www/$app
-    # and store the corresponding setting $install_dir
 
     [resources.data_dir]
-    # This will create/remove the data dir as /home/yunohost.app/$app
-    # and store the corresponding setting $data_dir
 
     [resources.permissions]
-    # This will configure SSOwat permission for $domain/$path/
-    # The initial allowed group of user is configured via the init_main_permission question (public=visitors, private=all_users)
     main.url = "/"
 
     [resources.ports]
@@ -106,12 +99,10 @@ ram.runtime = "50M"
     cloud.default = 8000
     admin_frontend.default = 3000
     ai.default = 5001
+    web.default = 3001
 
     [resources.apt]
-    # This will automatically install/uninstall the following apt packages
-    # and implicitly define the $phpversion setting as 8.0 (if phpX.Y-foobar dependencies are listed)
     packages = "rsync, openssl, libc6, libssl-dev, postgresql, redis, gcc, make, postgresql-server-dev-15\\|postgresql-server-dev-17, build-essential, libssl-dev, zlib1g-dev, libbz2-dev, libreadline-dev, libsqlite3-dev, curl, git, libncursesw5-dev, xz-utils, tk-dev, libxml2-dev, libxmlsec1-dev, libffi-dev, liblzma-dev, libpq-dev"
 
     [resources.database]
-    # This will automatically provision/deprovison a DB and store the corresponding credentials in settings $db_user, $db_name, $db_pwd
     type = "postgresql"

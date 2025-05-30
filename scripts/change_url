@@ -18,6 +18,7 @@ ynh_systemctl --service="${app}_worker" --action="stop"
 ynh_systemctl --service="${app}_ai" --action="stop"
 ynh_systemctl --service="${app}_gotrue" --action="stop"
 ynh_systemctl --service="${app}_minio" --action="stop"
+ynh_systemctl --service="${app}_web" --action="stop"
 
 #=================================================
 # MODIFY URL IN NGINX CONF
@@ -27,8 +28,6 @@ ynh_script_progression "Updating NGINX web server configuration..."
 # this will most likely adjust NGINX config correctly
 ynh_config_change_url_nginx
 
-#=================================================
-# SPECIFIC MODIFICATIONS
 #=================================================
 # UPDATE A CONFIG FILE
 #=================================================
@@ -63,6 +62,10 @@ ynh_config_add --template="appflowy_admin_frontend.env" --destination="$install_
 chmod 400 "$install_dir/appflowy_admin_frontend/.env"
 chown "$app:$app" "$install_dir/appflowy_admin_frontend/.env"
 
+ynh_config_add --template="appflowy_web.env" --destination="$install_dir/appflowy_web/.env"
+chmod 400 "$install_dir/appflowy_web/.env"
+chown "$app:$app" "$install_dir/appflowy_web/.env"
+
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
@@ -74,6 +77,7 @@ ynh_systemctl --service="${app}_ai" --action="start" --log_path="/var/log/$app/$
 ynh_systemctl --service="${app}_worker" --action="start" --log_path="/var/log/$app/${app}_worker.log" --wait_until="Starting importer worker"
 ynh_systemctl --service="${app}_cloud" --action="start" --log_path="/var/log/$app/${app}_cloud.log" --wait_until="Server started"
 ynh_systemctl --service="${app}_admin_frontend" --action="start" --log_path="/var/log/$app/${app}_admin_frontend.log" --wait_until="listening on"
+ynh_systemctl --service="${app}_web" --action="start" --log_path="/var/log/$app/${app}_web.log"
 
 #=================================================
 # END OF SCRIPT
