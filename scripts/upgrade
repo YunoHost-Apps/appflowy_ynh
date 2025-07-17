@@ -87,28 +87,11 @@ chown "$app:$app" "$install_dir/appflowy_minio/.env"
 
 local_hostname=$(hostname)
 ynh_config_add --template="appflowy_gotrue.env" --destination="$install_dir/appflowy_gotrue/.env"
-chmod 400 "$install_dir/appflowy_gotrue/.env"
-chown "$app:$app" "$install_dir/appflowy_gotrue/.env"
-
 ynh_config_add --template="appflowy_ai.env" --destination="$install_dir/appflowy_ai/.env"
-chmod 400 "$install_dir/appflowy_ai/.env"
-chown "$app:$app" "$install_dir/appflowy_ai/.env"
-
 ynh_config_add --template="appflowy_worker.env" --destination="$install_dir/appflowy_worker/.env"
-chmod 400 "$install_dir/appflowy_worker/.env"
-chown "$app:$app" "$install_dir/appflowy_worker/.env"
-
 ynh_config_add --template="appflowy_cloud.env" --destination="$install_dir/appflowy_cloud/.env"
-chmod 400 "$install_dir/appflowy_cloud/.env"
-chown "$app:$app" "$install_dir/appflowy_cloud/.env"
-
 ynh_config_add --template="appflowy_admin_frontend.env" --destination="$install_dir/appflowy_admin_frontend/.env"
-chmod 400 "$install_dir/appflowy_admin_frontend/.env"
-chown "$app:$app" "$install_dir/appflowy_admin_frontend/.env"
-
 ynh_config_add --template="appflowy_web.env" --destination="$install_dir/appflowy_web/.env"
-chmod 400 "$install_dir/appflowy_web/.env"
-chown "$app:$app" "$install_dir/appflowy_web/.env"
 
 #=================================================
 # REAPPLY SYSTEM CONFIGURATIONS

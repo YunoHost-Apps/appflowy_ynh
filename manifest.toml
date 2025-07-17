@@ -25,7 +25,6 @@ architectures = "all"
 multi_instance = false
 
 ldap = false
-
 sso = false
 
 disk = "50M"
@@ -92,7 +91,6 @@ ram.runtime = "50M"
     main.url = "/"
 
     [resources.ports]
-    # This will pick a random port for reverse-proxying and store it as the $port setting
     minio.default = 9000
     minio_console.default = 9001
     gotrue.default = 9999
