@@ -19,7 +19,7 @@ userdoc = "https://docs.appflowy.io/docs/guides/appflowy/self-hosting-appflowy"
 code = "https://github.com/AppFlowy-IO/AppFlowy-Cloud"
 
 [integration]
-yunohost = ">= 12.1.16"
+yunohost = ">= 12.1.15"
 helpers_version = "2.1"
 architectures = "all"
 multi_instance = false
