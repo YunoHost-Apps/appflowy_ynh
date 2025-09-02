@@ -74,7 +74,7 @@ ynh_setup_source --dest_dir="$install_dir/appflowy_web" --source_id="frontend"
 
 ynh_python_install
 
-ynh_nodejs_install
+#REMOVEME? ynh_nodejs_install
 
 #=================================================
 # UPDATE A CONFIG FILE
