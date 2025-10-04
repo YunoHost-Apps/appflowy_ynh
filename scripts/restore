@@ -16,16 +16,12 @@ ynh_script_progression "Restoring the app main directory..."
 
 ynh_restore "$install_dir"
 
-chown -R "$app:$app" "$install_dir"
-
 #=================================================
 # RESTORE THE DATA DIRECTORY
 #=================================================
 ynh_script_progression "Restoring the data directory..."
 
 ynh_restore "$data_dir"
-
-chown -R "$app:$app" "$data_dir"
 
 #=================================================
 # RESTORE THE POSTGRESQL DATABASE
@@ -122,7 +118,6 @@ popd
 chown -R "$app:www-data" "$install_dir"
 
 # Installing web
-ynh_nodejs_install
 pushd "$install_dir/appflowy_web"
     ynh_hide_warnings corepack enable
     ynh_hide_warnings ynh_exec_as_app corepack prepare pnpm@8.5.0 --activate
