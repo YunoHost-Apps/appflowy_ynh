@@ -119,10 +119,12 @@ chown -R "$app:www-data" "$install_dir"
 
 # Installing web
 pushd "$install_dir/appflowy_web"
-    ynh_hide_warnings corepack enable
-    ynh_hide_warnings ynh_exec_as_app corepack prepare pnpm@8.5.0 --activate
-    ynh_hide_warnings ynh_exec_as_app env pnpm install
-    ynh_hide_warnings ynh_exec_as_app env pnpm run build
+    ynh_hide_warnings corepack enable && corepack prepare pnpm@latest --activate
+    ynh_hide_warnings ynh_exec_as_app pnpm install
+    ynh_hide_warnings ynh_exec_as_app pnpm run build
+    # This is needed to allow access to the web app from the domain used in YunoHost
+    ynh_replace --match="optimizeDeps" --replace="preview: {allowedHosts: ['$domain'], }, \n optimizeDeps" --file="vite.config.ts"
+
 popd
 
 #=================================================

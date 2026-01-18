@@ -19,7 +19,7 @@ userdoc = "https://docs.appflowy.io/docs/guides/appflowy/self-hosting-appflowy"
 code = "https://github.com/AppFlowy-IO/AppFlowy-Cloud"
 
 [integration]
-yunohost = ">= 12.1.38"
+yunohost = ">= 12.1.32"
 helpers_version = "2.1"
 architectures = "all"
 multi_instance = false
@@ -60,26 +60,26 @@ ram.runtime = "50M"
     autoupdate.strategy = "latest_github_tag"
 
     [resources.sources.frontend]
-    url = "https://github.com/AppFlowy-IO/AppFlowy-Web/archive/refs/tags/v0.1.13.tar.gz"
-    sha256 = "67724374d650fa15e5f23c76b84c7c4f4197f82911a07a667621d9dc78a788fb"
+    url = "https://github.com/AppFlowy-IO/AppFlowy-Web/archive/refs/tags/0.9.143.tar.gz"
+    sha256 = "6495be5fe8cdf8856edd805488472e4d25552c2904459f78949e817f5f3635dc"
     
     [resources.sources.minio]
     extract = false
     in_subdir = false
     prefetch = false
     
-    arm64.url = "https://dl.min.io/server/minio/release/linux-arm64/archive/minio.RELEASE.2024-12-18T13-15-44Z"
-    arm64.sha256 = "455c9b3093b7c1e6153c85cfd745c7c401a92497346ba24dbe45775c7b3ab1cd"
+    arm64.url = "https://dl.min.io/server/minio/release/linux-arm64/minio.RELEASE.2025-09-07T16-13-09Z"
+    arm64.sha256 = "5c83cd2cf151717ba0243f73e1c7802ff36e272b67144bdd7f1f7d684fd6f03d"
 
-    amd64.url = "https://dl.min.io/server/minio/release/linux-amd64/archive/minio.RELEASE.2024-12-18T13-15-44Z"
-    amd64.sha256 = "88182336ab5793488f2caad54846056b330f0dcb5c488b60d52434beeebae3ca"
+    amd64.url = "https://dl.min.io/server/minio/release/linux-amd64/minio.RELEASE.2025-09-07T16-13-09Z"
+    amd64.sha256 = "7c5bd8512c6e966455b1d198209358b2d191c77a83ab377c4073281065fb855f"
 
     # Autoupdate cannot work because minio assets are on a specific website ...
     #autoupdate.strategy = "latest_github_tag"
 
     [resources.sources.pgvector]
-    url = "https://github.com/pgvector/pgvector/archive/refs/tags/v0.8.0.tar.gz"
-    sha256 = "867a2c328d4928a5a9d6f052cd3bc78c7d60228a9b914ad32aa3db88e9de27b0"
+    url = "https://github.com/pgvector/pgvector/archive/refs/tags/v0.8.1.tar.gz"
+    sha256 = "a9094dfb85ccdde3cbb295f1086d4c71a20db1d26bf1d6c39f07a7d164033eb4"
 
     [resources.system_user]
 

@@ -93,9 +93,8 @@ ynh_python_install
 #=================================================
 ynh_script_progression "Adding $app's configuration files..."
 
-ynh_config_add --template="appflowy_minio.env" --destination="$install_dir/appflowy_minio/.env"
-
 local_hostname=$(hostname)
+ynh_config_add --template="appflowy_minio.env" --destination="$install_dir/appflowy_minio/.env"
 ynh_config_add --template="appflowy_gotrue.env" --destination="$install_dir/appflowy_gotrue/.env"
 ynh_config_add --template="appflowy_ai.env" --destination="$install_dir/appflowy_ai/.env"
 ynh_config_add --template="appflowy_worker.env" --destination="$install_dir/appflowy_worker/.env"
@@ -198,10 +197,11 @@ chown -R "$app:www-data" "$install_dir"
 
 # Installing web UI
 pushd "$install_dir/appflowy_web"
-    ynh_hide_warnings corepack enable
-    ynh_hide_warnings ynh_exec_as_app corepack prepare pnpm@8.5.0 --activate
-    ynh_hide_warnings ynh_exec_as_app env pnpm install
-    ynh_hide_warnings ynh_exec_as_app env pnpm run build
+    ynh_hide_warnings corepack enable && corepack prepare pnpm@latest --activate
+    ynh_hide_warnings ynh_exec_as_app pnpm install
+    ynh_hide_warnings ynh_exec_as_app pnpm run build
+    # This is needed to allow access to the web app from the domain used in YunoHost
+    ynh_replace --match="optimizeDeps" --replace="preview: {allowedHosts: ['$domain'], }, \n optimizeDeps" --file="vite.config.ts"
 popd
 
 #=================================================
