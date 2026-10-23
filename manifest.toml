@@ -47,6 +47,7 @@ ram.runtime = "50M"
 
     [install.openai_api_key]
     ask.en = "Provide an OpenAI API KEY"
+    ask.fr = "Fournissez une clé d'API OpenAI"
     type = "text"
 
 [resources]
